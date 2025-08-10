@@ -16,7 +16,7 @@ router.get('/:userId', async (req, res) => {
 
     res.json(users[0]);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching user:', error);
     res.status(500).json({ error: 'Error fetching user' });
   }
 });
@@ -26,9 +26,8 @@ router.put('/:userId', async (req, res) => {
   const userId = req.params.userId;
   const { email, password, fullName } = req.body;
 
-  const connection = await pool.getConnection();
-
   try {
+    const connection = await pool.getConnection();
     await connection.beginTransaction();
 
     // Check if user exists
@@ -77,13 +76,11 @@ router.put('/:userId', async (req, res) => {
     await connection.query(updateQuery, updateValues);
 
     await connection.commit();
+    connection.release();
     res.json({ message: 'User updated successfully' });
   } catch (error) {
-    await connection.rollback();
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update user' });
-  } finally {
-    connection.release();
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Error updating user' });
   }
 });
 

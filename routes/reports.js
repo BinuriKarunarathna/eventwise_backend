@@ -35,7 +35,7 @@ router.get('/budget-summary/:userId', async (req, res) => {
 
     res.json(results);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching budget summary:', error);
     res.status(500).json({ error: 'Error fetching budget summary' });
   }
 });
@@ -71,7 +71,7 @@ router.get('/expense-analysis/:userId', async (req, res) => {
 
     res.json(results);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching expense analysis:', error);
     res.status(500).json({ error: 'Error fetching expense analysis' });
   }
 });
@@ -107,7 +107,7 @@ router.get('/event-comparison/:userId', async (req, res) => {
 
     res.json(results);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching event comparison:', error);
     res.status(500).json({ error: 'Error fetching event comparison' });
   }
 });
@@ -232,7 +232,7 @@ router.get('/forecast/:userId', async (req, res) => {
 
     res.json(forecastResults.slice(-8)); // Return last 8 quarters
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching forecast data:', error);
     res.status(500).json({ error: 'Error fetching forecast data' });
   }
 });
@@ -273,7 +273,7 @@ router.get('/spending-trends/:userId', async (req, res) => {
 
     res.json(results);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching spending trends:', error);
     res.status(500).json({ error: 'Error fetching spending trends' });
   }
 });

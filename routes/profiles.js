@@ -16,7 +16,7 @@ router.get('/:userId', async (req, res) => {
 
     res.json(profiles[0]);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching profile:', error);
     res.status(500).json({ error: 'Error fetching profile' });
   }
 });
@@ -26,9 +26,8 @@ router.put('/:userId', async (req, res) => {
   const userId = req.params.userId;
   const { phone, address, city, country, bio, dateOfBirth } = req.body;
 
-  const connection = await pool.getConnection();
-
   try {
+    const connection = await pool.getConnection();
     await connection.beginTransaction();
 
     // Check if profile already exists
@@ -49,13 +48,11 @@ router.put('/:userId', async (req, res) => {
     }
 
     await connection.commit();
+    connection.release();
     res.json({ message: 'Profile updated successfully' });
   } catch (error) {
-    await connection.rollback();
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update profile' });
-  } finally {
-    connection.release();
+    console.error('Error updating profile:', error);
+    res.status(500).json({ error: 'Error updating profile' });
   }
 });
 
