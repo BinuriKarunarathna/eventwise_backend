@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Direct backend URL for production
 const API_BASE_URL = 'https://eventwise-backend-k6ct.onrender.com/api';
 
 // Create axios instance with default config

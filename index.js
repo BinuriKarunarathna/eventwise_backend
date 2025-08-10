@@ -7,6 +7,7 @@ const userRoutes = require('./routes/users');
 const profileRoutes = require('./routes/profiles');
 const reportRoutes = require('./routes/reports');
 const expenseRoutes = require('./routes/expenses');
+const testRoutes = require('./routes/test');
 const app = express();
 const port = process.env.PORT || 3001; // Use Render's port or fallback to 3001
 
@@ -31,6 +32,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/profiles', profileRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/expenses', expenseRoutes);
+app.use('/api/test', testRoutes);
 
 // LOGIN endpoint - Plain text password comparison
 app.post('/api/users/login', async (req, res) => {
