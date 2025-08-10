@@ -1,3 +1,7 @@
+const express = require('express');
+const router = express.Router();
+const pool = require('../db'); // MySQL pool connection
+
 // Get all events
 router.get('/', async (req, res) => {
   try {
@@ -8,9 +12,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Error fetching all events' });
   }
 });
-const express = require('express');
-const router = express.Router();
-const pool = require('../db'); // MySQL pool connection
 
 // Create event
 router.post('/', async (req, res) => {
