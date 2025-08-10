@@ -1,3 +1,13 @@
+// Get all events
+router.get('/', async (req, res) => {
+  try {
+    const [events] = await pool.query('SELECT * FROM event ORDER BY start_date DESC');
+    res.json({ data: events });
+  } catch (error) {
+    console.error('Error fetching all events:', error);
+    res.status(500).json({ error: 'Error fetching all events' });
+  }
+});
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // MySQL pool connection
@@ -6,8 +16,9 @@ const pool = require('../db'); // MySQL pool connection
 router.post('/', async (req, res) => {
   const { name, description, location, startDate, endDate, totalBudget, user_id } = req.body;
 
-  if (!user_id) {
-    return res.status(400).json({ error: 'User ID is required' });
+  // Check for required fields
+  if (!user_id || !name || !startDate || !endDate || !totalBudget) {
+    return res.status(400).json({ error: 'Missing required fields: user_id, name, startDate, endDate, totalBudget' });
   }
 
   const connection = await pool.getConnection();
@@ -23,15 +34,6 @@ router.post('/', async (req, res) => {
 
     const eventId = eventResult.insertId;
 
-    // Insert categories
-    // if (Array.isArray(categories) && categories.length > 0) {
-    //   const categoryValues = categories.map(c => [eventId, c.category, c.amount, c.notes]);
-    //   await connection.query(
-    //     'INSERT INTO event_categories (eventId, category, amount, notes) VALUES ?',
-    //     [categoryValues]
-    //   );
-    // }
-
     await connection.commit();
 
     res.status(201).json({ message: 'Event created successfully', eventId });
@@ -44,8 +46,32 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Update event by ID
+router.put('/:id', async (req, res) => {
+  const eventId = req.params.id;
+  const { name, description, location, startDate, endDate, totalBudget } = req.body;
+
+  if (!name || !startDate || !endDate || !totalBudget) {
+    return res.status(400).json({ error: 'Missing required fields: name, startDate, endDate, totalBudget' });
+  }
+
+  try {
+    const [result] = await pool.query(
+      'UPDATE event SET name = ?, description = ?, location = ?, start_date = ?, end_date = ?, total_budget = ? WHERE id = ?',
+      [name, description, location, startDate, endDate, totalBudget, eventId]
+    );
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    res.json({ message: 'Event updated successfully', updatedId: eventId });
+  } catch (error) {
+    console.error('Error updating event:', error);
+    res.status(500).json({ error: 'Error updating event' });
+  }
+});
+
 // Get events by user ID - CORRECTED VERSION
-router.get('/user/:userId', async (req, res) => {
+router.get('/users/:userId', async (req, res) => {
   const userId = req.params.userId;
 
   try {
