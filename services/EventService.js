@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-// Direct backend URL for production
-const API_BASE_URL = 'https://eventwise-backend-k6ct.onrender.com/api';
+
+// Use environment variable for backend URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 // Create axios instance with default config
 const api = axios.create({
