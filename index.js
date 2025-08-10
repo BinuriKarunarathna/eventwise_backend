@@ -11,7 +11,13 @@ const testRoutes = require('./routes/test');
 const app = express();
 const port = process.env.PORT || 3001; // Use Render's port or fallback to 3001
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://eventwise-frontend-iflkwgwys-binuri-karunarathnas-projects.vercel.app',
+    'http://localhost:3000'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Add a basic health check endpoint
