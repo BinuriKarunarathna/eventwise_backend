@@ -8,10 +8,24 @@ const profileRoutes = require('./routes/profiles');
 const reportRoutes = require('./routes/reports');
 const expenseRoutes = require('./routes/expenses');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001; // Use Render's port or fallback to 3001
 
 app.use(cors());
 app.use(express.json());
+
+// Add a basic health check endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'EventWise Backend API is running!', 
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Server is healthy' });
+});
+
 app.use('/api/events', eventRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/profiles', profileRoutes);
