@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 
 
 // Register user
-router.post('register', async (req, res) => {
+router.post('/register', async (req, res) => {
   const { email, password, full_name } = req.body;
   try {
     // Check if email already exists
@@ -34,7 +34,7 @@ router.post('register', async (req, res) => {
 });
 
 // Login user
-router.post('login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const [users] = await pool.query('SELECT * FROM user WHERE email = ?', [email]);
